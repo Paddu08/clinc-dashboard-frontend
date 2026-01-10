@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button"
+import { DataTable } from "./notes/data-table"
+import { patients,columns } from "./notes/columns"
+
 
 function App() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
+     
+      <DataTable columns={columns} data={patients}/>
     </div>
   )
 }
