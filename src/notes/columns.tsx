@@ -1,6 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 
 
 type Patient = {
@@ -37,10 +38,16 @@ export const patients: Patient[] = [
 ]
 
 
+
+
+
+
 export const columns: ColumnDef<Patient>[] = [
+  
     {
     accessorKey: "patient",
        header: ({ column }) => {
+        
       return (
         <Button
           variant="ghost"

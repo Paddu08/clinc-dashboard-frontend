@@ -6,6 +6,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type PaginationState,
+
 } from "@tanstack/react-table"
 import {
   Table,
@@ -23,14 +25,19 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({
-  
+
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+   const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 5,
+  })
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
+
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -39,13 +46,17 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      pagination
     },
+     onPaginationChange: setPagination,
+
   })
-  
+ 
+
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <Table>
+      <Table >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -55,9 +66,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 )
               })}
@@ -87,7 +98,66 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      
+      <div className="flex items-center justify-between px-2 py-4">
+
+  <div className="flex gap-2">
+    <button
+      onClick={() => table.setPageIndex(0)}
+      disabled={!table.getCanPreviousPage()}
+      className="border px-2 py-1 rounded"
+    >
+      {"<<"}
+    </button>
+
+    <button
+      onClick={() => table.previousPage()}
+      disabled={!table.getCanPreviousPage()}
+      className="border px-2 py-1 rounded"
+    >
+      {"<"}
+    </button>
+
+    <button
+      onClick={() => table.nextPage()}
+      disabled={!table.getCanNextPage()}
+      className="border px-2 py-1 rounded"
+    >
+      {">"}
+    </button>
+
+    <button
+      onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+      disabled={!table.getCanNextPage()}
+      className="border px-2 py-1 rounded"
+    >
+      {">>"}
+    </button>
+  </div>
+
+  <span>
+    Page{" "}
+    <strong>
+      {table.getState().pagination.pageIndex + 1} of{" "}
+      {table.getPageCount()}
+    </strong>
+  </span>
+
+  <select
+    value={table.getState().pagination.pageSize}
+    onChange={(e) => {
+      table.setPageSize(Number(e.target.value))
+    }}
+    className="border px-2 py-1 rounded"
+  >
+    {[5, 10, 20].map((size) => (
+      <option key={size} value={size}>
+        Show {size}
+      </option>
+    ))}
+  </select>
+
+</div>
+
     </div>
   )
 }
