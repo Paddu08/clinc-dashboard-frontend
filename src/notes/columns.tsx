@@ -1,7 +1,8 @@
 import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useEffect } from "react"
+import { Badge } from "@/components/ui/badge"
+
 
 
 type Patient = {
@@ -88,6 +89,29 @@ export const columns: ColumnDef<Patient>[] = [
         </Button>
       )
     },
+    cell: (info) => {
+  const statusValue = info.getValue<string>()
+
+  let bgColor = "" // default fallback
+
+  switch (statusValue) {
+    case "Draft":
+      bgColor = "bg-blue-600"
+      break
+    case "Reviewed":
+      bgColor = "bg-yellow-600"
+      break
+    case "Submitted":
+      bgColor = "bg-green-600"
+      break
+  }
+
+  return (
+    <Badge  variant="outline" className={`${bgColor} w-20  text-white`}>
+      {statusValue}
+    </Badge>
+  )
+}
   },
 
   {
