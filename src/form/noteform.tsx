@@ -155,7 +155,7 @@ export default function MyForm() {
         </Field>
 
         <div className="col-span-2 flex justify-center pt-6">
-    <Button type="submit" className="w-2xl">
+    <Button type="submit" size="lg">
       Submit
     </Button>
   </div>

@@ -96,13 +96,13 @@ export const columns: ColumnDef<Patient>[] = [
 
   switch (statusValue) {
     case "Draft":
-      bgColor = "bg-blue-600"
-      break
-    case "Reviewed":
       bgColor = "bg-yellow-600"
       break
-    case "Submitted":
+    case "Reviewed":
       bgColor = "bg-green-600"
+      break
+    case "Submitted":
+      bgColor = "bg-blue-600"
       break
   }
 
