@@ -50,7 +50,7 @@ export default function MyForm() {
   const mutation = useMutation({
     mutationFn: (data: z.infer<typeof formSchema>) => {
       return axios.post(
-        `https://${import.meta.env.VITE_MOCKAPI_SECRET}.mockapi.io/api/v1/note`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/notes`,
         data
       )
     },
@@ -63,7 +63,7 @@ export default function MyForm() {
       toast.error("Failed to save")
     },
   })
-
+  
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.status === "Submitted") {
       setConfirmOpen(true)

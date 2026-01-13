@@ -15,6 +15,7 @@ import {
 
 
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 
 
@@ -25,10 +26,9 @@ function App() {
     queryFn: async () => {
       try {
         const response = await fetch(
-          `https://${import.meta.env.VITE_MOCKAPI_SECRET}.mockapi.io/api/v1/note`
+          `${API_BASE}/api/v1/notes`,
         )
 
-        // HTTP-level error (404, 500, etc)
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.status}`)
         }
