@@ -14,38 +14,30 @@ type Patient = {
   patient:string
 
 }
-export const patients: Patient[] = [
-  {
-     id: "728ed52",
-     patient: "John Smith",
-    summary:"test",
-   
-    
-    date: new Date("2026-01-09").toLocaleString(),
-    status: "Draft",
-   
-  },
-  {
-    id: "728ed524f",
-     patient: "Maria Lee",
-    summary:"test",
-   
-    date: new Date("2026-01-08").toLocaleString(),
-    status: "Submitted",
-   
-  },
-  
-  // ...
-]
 
 
 
 
 
 
-export const columns: ColumnDef<Patient>[] = [
+
+export const columns: ColumnDef<Patient>[] = [{
+  accessorKey:"id",
+  header: ({ column }) => {
+
+    return (
+        <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Id
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+    )}
+},
   
     {
+
     accessorKey: "patient",
        header: ({ column }) => {
         

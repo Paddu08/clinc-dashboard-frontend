@@ -2,10 +2,13 @@ import * as React from "react"
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+
   useReactTable,
   type PaginationState,
 } from "@tanstack/react-table"
 import { useQuery } from "@tanstack/react-query"
+import {useState} from "react";
 
 import {
   Table,
@@ -22,6 +25,8 @@ import {
   ChevronRight,
   ChevronsRight,
 } from "lucide-react"
+import { type SortingState } from "@tanstack/react-table"
+
 
 import { columns } from "@/notes/columns"
 
@@ -54,6 +59,8 @@ export function DataTable() {
     pageIndex: 0,
     pageSize: 5,
   })
+  const [sorting, setSorting] = useState<SortingState>([])
+
 
   const { data, isPending, error, isFetching } = useQuery<ApiResponse>({
     queryKey: ["notes", pagination.pageIndex, pagination.pageSize],
@@ -76,15 +83,17 @@ export function DataTable() {
     data: data?.items ?? [],
     columns,
     pageCount: data?.totalPages ?? -1,
-    state: { pagination },
+    state: { pagination,sorting },
     manualPagination: true,
     onPaginationChange: setPagination,
+    getSortedRowModel: getSortedRowModel(),
+
     getCoreRowModel: getCoreRowModel(),
+
+
+    onSortingChange: setSorting,
   })
 
-  /* ============================
-     States
-  ============================ */
 
   if (isPending) {
     return <div className="p-4">Loading…</div>
@@ -94,9 +103,7 @@ export function DataTable() {
     return <div className="p-4 text-red-500">Failed to load data</div>
   }
 
-  /* ============================
-     Render
-  ============================ */
+
 
   return (
       <div className="overflow-hidden rounded-lg border">
