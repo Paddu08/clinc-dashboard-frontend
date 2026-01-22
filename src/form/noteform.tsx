@@ -2,7 +2,6 @@ import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Form } from "@/components/ui/form"
-import { toast } from "sonner"
 import {
   Field,
   FieldLabel,
@@ -18,10 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import formSchema from "./schema"
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import { useMutation } from "@tanstack/react-query"
 import { Toaster } from "@/components/ui/sonner"
 import { useState } from "react"
 
@@ -35,9 +34,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {postData} from "@/api/Api.tsx";
+import type {CreateNotePayload} from "@/types/types.ts";
 
 export default function MyForm() {
-  const queryClient = useQueryClient()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,20 +48,8 @@ export default function MyForm() {
   })
 
   const mutation = useMutation({
-    mutationFn: (data: z.infer<typeof formSchema>) => {
-      return axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/v1/notes`,
-        data
-      )
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["patient"] })
-      toast.success("Saved successfully")
-      form.reset()
-    },
-    onError: () => {
-      toast.error("Failed to save")
-    },
+    mutationFn: (data:CreateNotePayload) =>
+        postData(data)
   })
   
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -71,6 +59,7 @@ export default function MyForm() {
     }
 
     mutation.mutate(values)
+    form.reset()
   }
 
   return (
@@ -112,8 +101,12 @@ export default function MyForm() {
       >
         <Field>
           <FieldLabel htmlFor="patient">Patient Name</FieldLabel>
-          <Input id="patient" placeholder="Patient Name" {...form.register("patient")} />
-          <FieldError>{form.formState.errors.patient?.message}</FieldError>
+          <Input
+              id="patient_name"
+              placeholder="Patient Name"
+              {...form.register("patient_name")}
+          />
+          <FieldError>{form.formState.errors.patient_name?.message}</FieldError>
         </Field>
 
         <Field>

@@ -3,19 +3,8 @@ import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
-
-
-type Patient = {
-  id: string
- 
-  status: "Draft" | "Reviewed" | "Submitted" 
-  date:string
-  summary: string
-  patient:string
-
-}
-
-
+import ActionsCell from "@/notes/action-cell.tsx";
+import type {Patient} from "@/types/types.ts";
 
 
 
@@ -95,6 +84,16 @@ export const columns: ColumnDef<Patient>[] = [
   {
     accessorKey: "summary",
       header: "Summary"
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    enableSorting: false,
+    enableHiding: false,
+    cell: ({ row }) => (
+        <ActionsCell rowData={row.original} />
+    ),
+
   },
    
 

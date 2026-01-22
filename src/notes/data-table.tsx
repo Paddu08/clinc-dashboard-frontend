@@ -29,6 +29,7 @@ import { type SortingState } from "@tanstack/react-table"
 
 
 import { columns } from "@/notes/columns"
+import {getData} from "@/api/Api.tsx";
 
 
 
@@ -60,27 +61,20 @@ export function DataTable() {
   const [sorting, setSorting] = useState<SortingState>([])
 
 
-  const { data, isPending, error, isFetching } = useQuery<ApiResponse>({
+  const getNotes = useQuery<ApiResponse>({
     queryKey: ["notes", pagination.pageIndex, pagination.pageSize],
     queryFn: async () => {
-      const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/v1/notes?page=${
-              pagination.pageIndex + 1
-          }&limit=${pagination.pageSize}`
-      )
+      return  getData({ pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,})
+    }
 
-      if (!res.ok) {
-        throw new Error("Failed to fetch notes")
-      }
 
-      return res.json()
-    },
   })
 
   const table = useReactTable<Note>({
-    data: data?.items ?? [],
+    data: getNotes.data?.items ?? [],
     columns,
-    pageCount: data?.totalPages ?? -1,
+    pageCount: getNotes.data?.totalPages ?? -1,
     state: { pagination,sorting },
     manualPagination: true,
     onPaginationChange: setPagination,
@@ -93,13 +87,15 @@ export function DataTable() {
   })
 
 
-  if (isPending) {
+  if (getNotes.isPending) {
     return <div className="p-4">Loading…</div>
   }
 
-  if (error) {
+  if (getNotes.error) {
     return <div className="p-4 text-red-500">Failed to load data</div>
   }
+
+
 
 
 
@@ -214,7 +210,7 @@ export function DataTable() {
           </select>
         </div>
 
-        {isFetching && (
+        {getNotes.isFetching && (
             <div className="px-2 pb-2 text-sm text-gray-500">
               Updating…
             </div>
