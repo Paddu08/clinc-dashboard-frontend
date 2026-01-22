@@ -13,7 +13,7 @@ import type {Patient} from "@/types/types.ts";
 export const columns: ColumnDef<Patient>[] = [
     {
 
-    accessorKey: "patient",
+    accessorKey: "patient_name",
        header: ({ column }) => {
         
       return (
