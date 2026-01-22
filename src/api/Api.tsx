@@ -1,7 +1,6 @@
 import * as Types from "../types/types.ts"
-import type {Writeable} from "zod/v3";
-import type {ZodISODate} from "zod";
-import type {$strip} from "zod/v4/core";
+
+import type {Note} from "../types/types.ts";
 export const getData = async (pagination: {
     pageIndex: number
     pageSize: number
@@ -19,19 +18,15 @@ export const getData = async (pagination: {
     return res.json()
 }
 
-export const postData = async (data: output<ZodObject<Writeable<{
-    patient: ZodString;
-    date: ZodISODate;
-    status: ZodEnum<ToEnum<readonly ["Draft", "Reviewed", "Submitted"][number]>>;
-    summary: ZodString
-}>, $strip>>) => {
+
+export const postData = async (
+    data: Types.CreateNotePayload
+): Promise<Note> => {
     const res = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/api/v1/notes`,
         {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         }
     )
@@ -40,9 +35,9 @@ export const postData = async (data: output<ZodObject<Writeable<{
         throw new Error("Failed to save")
     }
 
-    return res
-
+    return res.json()
 }
+
 
 
 export const updateData = async ({id, data}:{

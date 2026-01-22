@@ -35,7 +35,7 @@ import {getData} from "@/api/Api.tsx";
 
 export type Note = {
   id: string
-  patient: string
+  patient_name: string
   date: string
   summary: string
   status: "Draft" | "Reviewed" | "Submitted"
