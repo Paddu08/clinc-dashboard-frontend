@@ -30,9 +30,7 @@ import { type SortingState } from "@tanstack/react-table"
 
 import { columns } from "@/notes/columns"
 
-/* ============================
-   Types
-============================ */
+
 
 export type Note = {
   id: string
