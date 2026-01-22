@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import {Input} from "@/components/ui/input.tsx";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import type {Patient, UpdateNotePayload} from "@/types/types.ts";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 
 type EditNoteModalProps = {
     open: boolean
@@ -41,8 +42,26 @@ export function EditNoteModal({
                     className="space-y-4"
                 >
                     <Input {...form.register("patient_name")} />
-                    <Input {...form.register("date")} />
+
+                    <Input type="date" {...form.register("date")} />
+
                     <Textarea {...form.register("summary")} />
+
+                    <Select
+                        defaultValue={initialData.status}
+                        onValueChange={(value) => form.setValue("status", value)}
+                    >
+                        <SelectTrigger>
+
+
+                            <SelectValue placeholder="Select status"/>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Reviewed">Reviewed</SelectItem>
+                            <SelectItem value="Draft">Draft</SelectItem>
+                            <SelectItem value="Submitted">Submitted</SelectItem>
+                        </SelectContent>
+                    </Select>
 
                     <Button type="submit" disabled={isSubmitting}>
                         Save changes
@@ -50,5 +69,5 @@ export function EditNoteModal({
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
